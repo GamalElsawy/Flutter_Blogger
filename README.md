@@ -1,6 +1,7 @@
 # blogger
 
-A new Flutter project.
+Blogger Application using Flutter & Firebase.
+In Progress... 25% DONE.
 
 ## Getting Started
 
