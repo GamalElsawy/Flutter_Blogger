@@ -1,7 +1,7 @@
 # Post_Blogger
 
 Blogger Application using Flutter & Firebase.
-In Progress... 30% DONE.
+In Progress... 32% DONE.
 
 # Sub-Tasks:
 
