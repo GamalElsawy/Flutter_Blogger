@@ -1,6 +1,10 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:blogger/services/crud.dart';
 import 'dart:io';
+
+import 'package:random_string/random_string.dart';
 
 class createBlog extends StatefulWidget {
   @override
@@ -11,6 +15,8 @@ class _createBlogState extends State<createBlog> {
   String _title = "", _description = "";
   File _image;
   final picker = ImagePicker();
+  CrudMethods cm = new CrudMethods();
+  bool _isLoading = false;
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -18,6 +24,27 @@ class _createBlogState extends State<createBlog> {
     setState(() {
       _image = File(pickedFile.path);
     });
+  }
+
+  uploadBlog() async {
+    if (_image != null) {
+      setState(() {
+        _isLoading = true;
+      });
+      StorageReference fsr = FirebaseStorage.instance
+          .ref()
+          .child("blogImages")
+          .child("${randomAlphaNumeric(9)}.jpg");
+      final StorageUploadTask task = fsr.putFile(_image);
+      var downloadURL = await (await task.onComplete).ref.getDownloadURL();
+      print("Image URL is $downloadURL");
+      Map<String,String> blogMap = {
+        "imageURL" : downloadURL,
+        "title" : _title,
+        "desc" : _description 
+      };
+      cm.addData(blogMap).then((value) => Navigator.pop(context));
+    } else {}
   }
 
   @override
@@ -35,12 +62,21 @@ class _createBlogState extends State<createBlog> {
           ],
         ),
         actions: <Widget>[
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(Icons.file_upload))
+          GestureDetector(
+            onTap: () {
+              uploadBlog();
+            },
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(Icons.file_upload)),
+          )
         ],
       ),
-      body: SingleChildScrollView(
+      body: _isLoading ? Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      )
+      :SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -52,7 +88,12 @@ class _createBlogState extends State<createBlog> {
               },
               child: _image != null
                   ? Container(
-                      child: Image.file(_image),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.file(
+                            _image,
+                            fit: BoxFit.cover,
+                          )),
                       margin: EdgeInsets.symmetric(horizontal: 5),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 4,
