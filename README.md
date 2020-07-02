@@ -1,7 +1,6 @@
 # Post_Blogger
 
 Blogger Application using Flutter & Firebase.
-In Progress... 95% DONE.
 
 # Sub-Tasks:
 
@@ -12,4 +11,10 @@ In Progress... 95% DONE.
 - Creating the Map contains the values and upload it to Firestore. - DONE - 
 - Fetching Data From Firebase. - DONE - 
 - Loading Data in ListView. - DONE - 
-- Configuration & Releasing. - In Progress - 
+- Configuration & Releasing. - DONE -
+
+# Soon-Features:
+
+- User Authentication.
+- User Profile.
+- Complete Control Over Blogs. 
