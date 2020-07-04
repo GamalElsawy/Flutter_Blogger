@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:blogger/services/crud.dart';
 import 'dart:io';
-
+import 'package:blogger/screens/HomePage.dart';
 import 'package:random_string/random_string.dart';
 
 class createBlog extends StatefulWidget {
@@ -46,12 +46,13 @@ class _createBlogState extends State<createBlog> {
         "desc": _description
       };
       cm.addData(blogMap).then((value) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-        //HomePage.;
-        //initState();
+        BlogTile template = new BlogTile(
+            imageURL: downloadURL, title: _title, desc: _description);
+        Navigator.pop(context, template);
       });
-    } else {}
+    } else {
+      // To Allow Posting Without Image .. Soon
+    }
   }
 
   @override
